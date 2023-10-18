@@ -25,9 +25,9 @@ namespace PersonService.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ContactInfo> GetContactInfo(Guid id)
+        public ActionResult<ContactInfo> Show(Guid id)
         {
-            var contactInfo = _context.ContactInfos.FirstOrDefault(p => p.Id == id);
+            var contactInfo = _context.ContactInfos.Include(ci => ci.ContactTypes).FirstOrDefault(p => p.Id == id);
             if (contactInfo == null)
             {
                 return NotFound();
@@ -36,7 +36,7 @@ namespace PersonService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateContactInfo([FromBody] ContactInfoRequest request)
+        public async Task<IActionResult> Create([FromBody] ContactInfoRequest request)
         {
             if (request == null)
             {
@@ -60,12 +60,11 @@ namespace PersonService.Controllers
             _context.ContactInfos.Add(contactInfo);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetContactInfo), new { id = contactInfo.Id }, contactInfo);
+            return CreatedAtAction(nameof(Show), new { id = contactInfo.Id }, contactInfo);
         }
 
         [HttpPut("{id}")]
-        // İletişim bilgisini güncelleme
-        public async Task<IActionResult> UpdateContactInfo(Guid id, [FromBody] ContactInfoRequest request)
+        public async Task<IActionResult> Update(Guid id, [FromBody] ContactInfoRequest request)
         {
             if (request == null)
             {
@@ -80,15 +79,14 @@ namespace PersonService.Controllers
             }
 
             contactInfo.Content = request.Content;
-            // Diğer güncelleme işlemleri burada yapılabilir
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return CreatedAtAction(nameof(Show), new { id = contactInfo.Id }, contactInfo);
         }
 
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContactInfo(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var contactInfo = await _context.ContactInfos.FindAsync(id);
 
