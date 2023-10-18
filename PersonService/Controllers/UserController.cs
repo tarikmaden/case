@@ -21,49 +21,38 @@ namespace PersonService.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUsers()
+        public IActionResult Index()
         {
             var usersWithContacts = _context.Users
             .Include(u => u.ContactInfos)
             .ThenInclude(ci => ci.ContactTypes)
             .ToList();
 
-            // AutoMapper ile projeksiyon işlemi
             var userResources = _mapper.Map<List<UserResource>>(usersWithContacts);
 
             return Ok(userResources);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<User> GetUser(Guid id)
+        public IActionResult Show(Guid id)
         {
-            var user = _context.Users.FirstOrDefault(p => p.Id == id);
-            if (user == null)
+            var userWithContacts = _context.Users
+                .Include(u => u.ContactInfos)
+                .ThenInclude(ci => ci.ContactTypes)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (userWithContacts == null)
             {
                 return NotFound();
             }
-            return Ok(user);
-        }
 
-        [HttpGet("users/{userId}/contactinfos")]
-        public IActionResult GetUserContactInfos(Guid userId)
-        {
-            // Verilen userId'ye sahip kullanıcıyı bulun
-            var user = _context.Users.Include(u => u.ContactInfos).FirstOrDefault(u => u.Id == userId);
+            var userResource = _mapper.Map<UserResource>(userWithContacts);
 
-            if (user == null)
-            {
-                return NotFound("Kullanıcı bulunamadı");
-            }
-
-            // Kullanıcının iletişim bilgilerini döndürün
-            var contactInfos = user.ContactInfos;
-
-            return Ok(contactInfos);
+            return Ok(userResource);
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromBody] UserRequest request)
+        public IActionResult Create([FromBody] UserRequest request)
         {
             if (request == null)
             {
@@ -80,34 +69,41 @@ namespace PersonService.Controllers
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            return CreatedAtAction(nameof(Show), new { id = user.Id }, user);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(Guid id, [FromBody] User updatedUser)
+        public IActionResult Update(Guid id, [FromBody] UserRequest request)
         {
-            if (id != updatedUser.Id)
+            if (request == null)
             {
-                return BadRequest();
+                return BadRequest("Geçersiz veri.");
             }
 
-            var existingUser = _context.Users.FirstOrDefault(p => p.Id == id);
+            var existingUser = _context.Users
+               .Include(u => u.ContactInfos)
+               .ThenInclude(ci => ci.ContactTypes)
+               .FirstOrDefault(u => u.Id == id);
+
             if (existingUser == null)
             {
                 return NotFound();
             }
 
-            existingUser.FirstName = updatedUser.FirstName;
-            existingUser.LastName = updatedUser.LastName;
-            existingUser.Company = updatedUser.Company;
+            existingUser.FirstName = request.FirstName;
+            existingUser.LastName = request.LastName;
+            existingUser.Company = request.Company;
 
+            _context.Users.Update(existingUser);
             _context.SaveChanges();
 
-            return NoContent();
+            var userResource = _mapper.Map<UserResource>(existingUser);
+
+            return CreatedAtAction(nameof(Show), new { id = userResource.Id }, userResource);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteUser(Guid id)
+        public IActionResult Delete(Guid id)
         {
             var user = _context.Users.FirstOrDefault(p => p.Id == id);
             if (user == null)
