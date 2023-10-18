@@ -12,7 +12,7 @@ using PersonService.Models;
 namespace PersonService.Migrations
 {
     [DbContext(typeof(EntityContext))]
-    [Migration("20231017211119_InitialCreate")]
+    [Migration("20231018092216_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -23,27 +23,22 @@ namespace PersonService.Migrations
                 .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("PersonService.Models.ContactInfo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("uuid_generate_v4()");
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("ContactTypeId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ContactTypeId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -57,8 +52,7 @@ namespace PersonService.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("uuid_generate_v4()");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -72,8 +66,7 @@ namespace PersonService.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("uuid_generate_v4()");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Company")
                         .IsRequired()
@@ -96,7 +89,9 @@ namespace PersonService.Migrations
                 {
                     b.HasOne("PersonService.Models.User", null)
                         .WithMany("ContactInfos")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PersonService.Models.User", b =>

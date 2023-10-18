@@ -1,16 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using PersonService.Data;
 using PersonService.Models;
+using PersonService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<EntityContext>(options =>options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<EntityContext>(options => options.UseNpgsql(connectionString));
+// builder.Services.AddDbContext<EntityContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
 var app = builder.Build();
 
@@ -25,6 +28,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
+        // Hata durumunda yapılacaklar
     }
 }
 

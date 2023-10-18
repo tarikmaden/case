@@ -1,25 +1,37 @@
 using Microsoft.AspNetCore.Mvc;
 using PersonService.Models;
 using PersonService.DTO;
+using AutoMapper;
+using PersonService.Resource;
+using Microsoft.EntityFrameworkCore;
 
-namespace UserService.Controllers
+namespace PersonService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly EntityContext _context;
+        private readonly IMapper _mapper;
 
-        public UserController(EntityContext context)
+        public UserController(EntityContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<User>> GetUsers()
+        public IActionResult GetUsers()
         {
-            var users = _context.Users.ToList();
-            return Ok(users);
+            var usersWithContacts = _context.Users
+            .Include(u => u.ContactInfos)
+            .ThenInclude(ci => ci.ContactTypes)
+            .ToList();
+
+            // AutoMapper ile projeksiyon işlemi
+            var userResources = _mapper.Map<List<UserResource>>(usersWithContacts);
+
+            return Ok(userResources);
         }
 
         [HttpGet("{id}")]
@@ -33,8 +45,25 @@ namespace UserService.Controllers
             return Ok(user);
         }
 
+        [HttpGet("users/{userId}/contactinfos")]
+        public IActionResult GetUserContactInfos(Guid userId)
+        {
+            // Verilen userId'ye sahip kullanıcıyı bulun
+            var user = _context.Users.Include(u => u.ContactInfos).FirstOrDefault(u => u.Id == userId);
+
+            if (user == null)
+            {
+                return NotFound("Kullanıcı bulunamadı");
+            }
+
+            // Kullanıcının iletişim bilgilerini döndürün
+            var contactInfos = user.ContactInfos;
+
+            return Ok(contactInfos);
+        }
+
         [HttpPost]
-        public IActionResult CreateUser([FromBody] CreateUserRequest request)
+        public IActionResult CreateUser([FromBody] UserRequest request)
         {
             if (request == null)
             {
@@ -68,7 +97,6 @@ namespace UserService.Controllers
                 return NotFound();
             }
 
-            // Güncelleme işlemi
             existingUser.FirstName = updatedUser.FirstName;
             existingUser.LastName = updatedUser.LastName;
             existingUser.Company = updatedUser.Company;
