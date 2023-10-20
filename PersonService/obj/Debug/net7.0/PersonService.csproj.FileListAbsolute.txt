@@ -105,3 +105,5 @@
 /Users/wookweb/Desktop/case/PersonService/bin/Debug/net7.0/runtimes/win/lib/net6.0/System.Runtime.Caching.dll
 /Users/wookweb/Desktop/case/PersonService/bin/Debug/net7.0/runtimes/win/lib/net6.0/System.Security.Cryptography.ProtectedData.dll
 /Users/wookweb/Desktop/case/PersonService/bin/Debug/net7.0/runtimes/win/lib/net6.0/System.Windows.Extensions.dll
+/Users/wookweb/Desktop/case/PersonService/bin/Debug/net7.0/Entity.dll
+/Users/wookweb/Desktop/case/PersonService/bin/Debug/net7.0/Entity.pdb

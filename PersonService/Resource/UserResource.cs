@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Entity.Models;
 
 namespace PersonService.Resource
 {
@@ -11,6 +12,5 @@ namespace PersonService.Resource
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Company { get; set; }
-        public List<ContactInfoResource> ContactInfos { get; set; }
     }
 }

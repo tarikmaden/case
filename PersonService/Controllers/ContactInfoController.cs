@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PersonService.Models;
+using Entity.Models;
 using PersonService.DTO;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PersonService.Data;
-using PersonService.Models;
+using Entity.Models;
 using PersonService;
 
 var builder = WebApplication.CreateBuilder(args);

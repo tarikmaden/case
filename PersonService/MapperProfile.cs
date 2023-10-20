@@ -1,5 +1,5 @@
 using AutoMapper;
-using PersonService.Models;
+using Entity.Models;
 using PersonService.Resource;
 
 namespace PersonService
@@ -10,7 +10,7 @@ namespace PersonService
         {
             CreateMap<User, UserResource>();
             CreateMap<ContactInfo, ContactInfoResource>();
-             CreateMap<ContactType, ContactTypeResource>();
+            CreateMap<ContactType, ContactTypeResource>();
         }
     }
 }

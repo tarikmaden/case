@@ -1,7 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PersonService.Models;
+using Entity.Models;
 using System.Linq;
 
 namespace PersonService.Data
@@ -20,9 +20,9 @@ namespace PersonService.Data
                 }
 
                 // ContactType verilerini ekleyin
-                context.ContactTypes.Add(new ContactType { Id = Guid.NewGuid(), Name = "Telefon Numarası" });
-                context.ContactTypes.Add(new ContactType { Id = Guid.NewGuid(), Name = "E-mail Adresi" });
-                context.ContactTypes.Add(new ContactType { Id = Guid.NewGuid(), Name = "Konum" });
+                context.ContactTypes.Add(new ContactType { Id = Guid.NewGuid(), Name = "Telefon Numarası",Slug = "phone" });
+                context.ContactTypes.Add(new ContactType { Id = Guid.NewGuid(), Name = "E-mail Adresi" ,Slug = "email"});
+                context.ContactTypes.Add(new ContactType { Id = Guid.NewGuid(), Name = "Konum" ,Slug = "location"});
 
                 context.SaveChanges();
             }

@@ -1,0 +1,14 @@
+/Users/wookweb/Desktop/case/Entity/obj/Debug/net7.0/Entity.csproj.AssemblyReference.cache
+/Users/wookweb/Desktop/case/Entity/obj/Debug/net7.0/Entity.GeneratedMSBuildEditorConfig.editorconfig
+/Users/wookweb/Desktop/case/Entity/obj/Debug/net7.0/Entity.AssemblyInfoInputs.cache
+/Users/wookweb/Desktop/case/Entity/obj/Debug/net7.0/Entity.AssemblyInfo.cs
+/Users/wookweb/Desktop/case/Entity/obj/Debug/net7.0/Entity.csproj.CoreCompileInputs.cache
+/Users/wookweb/Desktop/case/Entity/bin/Debug/net7.0/Entity.deps.json
+/Users/wookweb/Desktop/case/Entity/bin/Debug/net7.0/Entity.runtimeconfig.json
+/Users/wookweb/Desktop/case/Entity/bin/Debug/net7.0/Entity.dll
+/Users/wookweb/Desktop/case/Entity/bin/Debug/net7.0/Entity.pdb
+/Users/wookweb/Desktop/case/Entity/obj/Debug/net7.0/Entity.dll
+/Users/wookweb/Desktop/case/Entity/obj/Debug/net7.0/refint/Entity.dll
+/Users/wookweb/Desktop/case/Entity/obj/Debug/net7.0/Entity.pdb
+/Users/wookweb/Desktop/case/Entity/obj/Debug/net7.0/Entity.genruntimeconfig.cache
+/Users/wookweb/Desktop/case/Entity/obj/Debug/net7.0/ref/Entity.dll

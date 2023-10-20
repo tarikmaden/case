@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PersonService.Models;
+using Entity.Models;
 using PersonService.DTO;
 using AutoMapper;
 using PersonService.Resource;
@@ -23,10 +23,7 @@ namespace PersonService.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var usersWithContacts = _context.Users
-            .Include(u => u.ContactInfos)
-            .ThenInclude(ci => ci.ContactTypes)
-            .ToList();
+            var usersWithContacts = _context.Users.ToList();
 
             var userResources = _mapper.Map<List<UserResource>>(usersWithContacts);
 
@@ -36,10 +33,7 @@ namespace PersonService.Controllers
         [HttpGet("{id}")]
         public IActionResult Show(Guid id)
         {
-            var userWithContacts = _context.Users
-                .Include(u => u.ContactInfos)
-                .ThenInclude(ci => ci.ContactTypes)
-                .FirstOrDefault(p => p.Id == id);
+            var userWithContacts = _context.Users.FirstOrDefault(p => p.Id == id);
 
             if (userWithContacts == null)
             {
@@ -80,10 +74,7 @@ namespace PersonService.Controllers
                 return BadRequest("Geçersiz veri.");
             }
 
-            var existingUser = _context.Users
-               .Include(u => u.ContactInfos)
-               .ThenInclude(ci => ci.ContactTypes)
-               .FirstOrDefault(u => u.Id == id);
+            var existingUser = _context.Users.FirstOrDefault(u => u.Id == id);
 
             if (existingUser == null)
             {

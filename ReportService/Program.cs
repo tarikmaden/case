@@ -1,13 +1,18 @@
+using Entity.Models;
 using Microsoft.EntityFrameworkCore;
-using ReportService.Models;
+using ReportService.Rabbit;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// RabbitMQ bağlantı ayarlarını okuyun
+var rabbitMQConfig = builder.Configuration.GetSection("RabbitMQ").Get<RabbitMQConfig>();
 
 // PostgreSQL bağlantı dizesini alın
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // PostgreSQL veritabanı bağlamını yapılandırın
-builder.Services.AddDbContext<EntityContext>(options =>options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<EntityContext>(options =>options.UseNpgsql(connectionString, b => b.MigrationsAssembly("Entity")));
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
